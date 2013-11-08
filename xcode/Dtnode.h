@@ -13,10 +13,12 @@
 
 class Dtnode {
 public:
-    Dtnode();
+    Dtnode(ci::Vec2f);
+    void update(ci::Color );
+    void draw();
     
-    ci::Vec2f mLoc;
-    float mRadius;
+    ci::Vec2f mPos;
+    float mSize;
     ci::Color mColor;
     
 };

@@ -1,5 +1,9 @@
 #include "cinder/app/AppBasic.h"
 #include "cinder/gl/gl.h"
+#include "cinder/Vector.h"
+#include "DtnodeLine.h"
+
+#define YEARS 32
 
 using namespace ci;
 using namespace ci::app;
@@ -13,6 +17,9 @@ class TunelineApp : public AppBasic {
 	void mouseDown( MouseEvent event );	
 	void update();
 	void draw();
+
+    DtnodeLine mDtnodeLine;
+    Color mColor;
 };
 
 void TunelineApp::prepareSettings( Settings *settings )
@@ -23,6 +30,9 @@ void TunelineApp::prepareSettings( Settings *settings )
 
 void TunelineApp::setup()
 {
+    mDtnodeLine = DtnodeLine(YEARS);
+	mColor = Color(0.5f, 0.3f, 0.8f);
+    
 }
 
 void TunelineApp::mouseDown( MouseEvent event )
@@ -31,13 +41,16 @@ void TunelineApp::mouseDown( MouseEvent event )
 
 void TunelineApp::update()
 {
+    mDtnodeLine.update(mColor);
 }
 
 void TunelineApp::draw()
 {
 	// clear out the window with black
 	gl::clear( Color( 0, 0, 0 ) );
-    gl::drawStrokedCube(getWindowCenter(), const Vec3f &size)
+    mDtnodeLine.draw();
+    
+    
 }
 
 CINDER_APP_BASIC( TunelineApp, RendererGl )

@@ -20,6 +20,7 @@
 		53E3CDFC0E86099300238D2B /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53E3CDFB0E86099300238D2B /* Carbon.framework */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		998A7515182CC7E500854904 /* Dtnode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 998A7513182CC7E500854904 /* Dtnode.cpp */; };
+		998A7518182CD98500854904 /* DtnodeLine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 998A7516182CD98500854904 /* DtnodeLine.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,6 +44,8 @@
 		8D1107320486CEB800E47090 /* Tuneline.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tuneline.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		998A7513182CC7E500854904 /* Dtnode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Dtnode.cpp; sourceTree = "<group>"; };
 		998A7514182CC7E500854904 /* Dtnode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Dtnode.h; sourceTree = "<group>"; };
+		998A7516182CD98500854904 /* DtnodeLine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DtnodeLine.cpp; sourceTree = "<group>"; };
+		998A7517182CD98500854904 /* DtnodeLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DtnodeLine.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,6 +74,7 @@
 			children = (
 				00BAE6590E7ED9C10018A608 /* TunelineApp.cpp */,
 				998A7513182CC7E500854904 /* Dtnode.cpp */,
+				998A7516182CD98500854904 /* DtnodeLine.cpp */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -125,6 +129,7 @@
 		29B97315FDCFA39411CA2CEA /* Headers */ = {
 			isa = PBXGroup;
 			children = (
+				998A7517182CD98500854904 /* DtnodeLine.h */,
 				998A7514182CC7E500854904 /* Dtnode.h */,
 				32CA4F630368D1EE00C91783 /* Tuneline_Prefix.pch */,
 			);
@@ -209,6 +214,7 @@
 			files = (
 				00BAE65A0E7ED9C10018A608 /* TunelineApp.cpp in Sources */,
 				998A7515182CC7E500854904 /* Dtnode.cpp in Sources */,
+				998A7518182CD98500854904 /* DtnodeLine.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -229,11 +235,13 @@
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
+				MACOSX_DEPLOYMENT_TARGET = "";
 				OTHER_LDFLAGS = (
 					"\"$(CINDER_PATH)/lib/libcinder_d.a\"",
 					"-lcurl",
 				);
 				PRODUCT_NAME = Tuneline;
+				SDKROOT = macosx;
 				SYMROOT = ./build;
 				WRAPPER_EXTENSION = app;
 			};
@@ -254,11 +262,13 @@
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
+				MACOSX_DEPLOYMENT_TARGET = "";
 				OTHER_LDFLAGS = (
 					"\"$(CINDER_PATH)/lib/libcinder.a\"",
 					"-lcurl",
 				);
 				PRODUCT_NAME = Tuneline;
+				SDKROOT = macosx;
 				STRIP_INSTALLED_PRODUCT = YES;
 				SYMROOT = ./build;
 				WRAPPER_EXTENSION = app;
