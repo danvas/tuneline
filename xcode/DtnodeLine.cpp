@@ -32,12 +32,7 @@ DtnodeLine::DtnodeLine( int res )
 }
 
 void DtnodeLine::update(Color color)
-{
-//	for( list<Dtnode>::iterator p = mDtnodes.begin(); p != mDtnodes.end(); ++p )
-//    {
-//		p->update(color);
-//	}
-    
+{    
     for(int i = 0; i < mDtnodes.size(); i++)
     {
         mDtnodes[i].update(color);
@@ -46,16 +41,11 @@ void DtnodeLine::update(Color color)
 
 void DtnodeLine::draw()
 {
-//    for( list<Dtnode>::iterator p = mDtnodes.begin(); p != mDtnodes.end(); ++p )
-//    {
-//		p->draw();
-//	}
     
     for(int i = 0; i < mDtnodes.size(); i++)
     {
         mDtnodes[i].draw();
     }
-    
     
 }
 
@@ -63,20 +53,11 @@ void DtnodeLine::addDtnode( int xi, int yi, int res )
 {
     float size = res/2.0f * sizeOffset;
 	float y = ( yi + 0.5f ) * (float)res;
-    //cout << "y= " << y << endl << endl;
 	mDtnodes.push_back( Dtnode( Vec2f( xi, y ), size ) );
 }
 
 Dtnode DtnodeLine::getNodeAtPosition(Vec2i position)
 {
-//    for( list<Dtnode>::iterator p = mDtnodes.begin(); p != mDtnodes.end(); ++p )
-//    {
-//        if(p->isInsideNode(position))
-//        {
-//           
-//            return p->thisNode();
-//        }
-//	}
     
     Dtnode node;
     for(int i = 0; i < mDtnodes.size(); i++)

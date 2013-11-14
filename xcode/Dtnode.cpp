@@ -35,10 +35,6 @@ void Dtnode::draw()
     
 }
 
-Dtnode Dtnode::thisNode()
-{
-    return *this;
-}
 
 void Dtnode::addTrack( Track track )
 {

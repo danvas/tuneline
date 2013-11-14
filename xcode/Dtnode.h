@@ -21,7 +21,7 @@ public:
     Dtnode(ci::Vec2f, float);
     void update(ci::Color );
     void draw();
-    Dtnode thisNode();
+
     
     void addTrack( Track );
     ci::Vec2i getPosition();

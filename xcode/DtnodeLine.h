@@ -26,7 +26,6 @@ public:
     Dtnode getNodeAtPosition(ci::Vec2i);
     
     std::vector<Dtnode> mDtnodes;
-    //std::list<Dtnode> mDtnodes;
     
     int mXRes, mYRes;
 private:

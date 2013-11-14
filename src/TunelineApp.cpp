@@ -26,6 +26,7 @@ class TunelineApp : public AppBasic {
     DtnodeLine mDtnodeLine;
     Color mColor;
     Vec2i mMouseLoc;
+    
 
 };
 
@@ -63,6 +64,7 @@ void TunelineApp::mouseDrag( MouseEvent event ) {
 
 void TunelineApp::update()
 {
+    
     mDtnodeLine.update(mColor);
 }
 
