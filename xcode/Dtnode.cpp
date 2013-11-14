@@ -28,9 +28,7 @@ void Dtnode::update(Color color)
 
 void Dtnode::draw()
 {
-    //gl::drawStrokedCube(mPos, mSize);
     gl::color( mColor);
-    //gl::drawStrokedCircle(mPos, mSize);
     gl::drawSolidEllipse(mPos, mSize, mSize);
     
 }
