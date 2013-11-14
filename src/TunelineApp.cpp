@@ -44,7 +44,7 @@ void TunelineApp::setup()
 {
     mDtnodeLine = DtnodeLine(AGE);
 	mColor = Color(0.8f, 0.2f, 0.3f);
-    mCurrentView = DECADE;
+    mCurrentView = YEAR;
 }
 
 void TunelineApp::mouseDown( MouseEvent event )
