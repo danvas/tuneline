@@ -10,6 +10,7 @@
 #include "cinder/Color.h"
 #include <iostream>
 #include <list>
+#include <vector>
 
 class DtnodeLine {
 public:
@@ -20,10 +21,16 @@ public:
     
     void draw();
     void addDtnode( int, int, int );
+    void expandDtnode (Dtnode);
+
+    Dtnode getNodeAtPosition(ci::Vec2i);
     
-    std::list<Dtnode> mDtnodes;
+    std::vector<Dtnode> mDtnodes;
+    //std::list<Dtnode> mDtnodes;
     
     int mXRes, mYRes;
+private:
+    float sizeOffset;
     
 };
 
