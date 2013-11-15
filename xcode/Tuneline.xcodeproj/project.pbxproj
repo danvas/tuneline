@@ -19,6 +19,7 @@
 		5323E6B60EAFCA7E003A9687 /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B50EAFCA7E003A9687 /* QTKit.framework */; };
 		53E3CDFC0E86099300238D2B /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53E3CDFB0E86099300238D2B /* Carbon.framework */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+		9913735C18360FB8005AB375 /* HttpRequestHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9913735A18360FB8005AB375 /* HttpRequestHandler.cpp */; };
 		9959229C1831FECA007A6BBD /* Track.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9959229A1831FECA007A6BBD /* Track.cpp */; };
 		998A7515182CC7E500854904 /* Dtnode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 998A7513182CC7E500854904 /* Dtnode.cpp */; };
 		998A7518182CD98500854904 /* DtnodeLine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 998A7516182CD98500854904 /* DtnodeLine.cpp */; };
@@ -43,6 +44,8 @@
 		53E3CDFB0E86099300238D2B /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* Tuneline.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tuneline.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		9913735A18360FB8005AB375 /* HttpRequestHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HttpRequestHandler.cpp; sourceTree = "<group>"; };
+		9913735B18360FB8005AB375 /* HttpRequestHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HttpRequestHandler.h; sourceTree = "<group>"; };
 		9959229A1831FECA007A6BBD /* Track.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Track.cpp; sourceTree = "<group>"; };
 		9959229B1831FECA007A6BBD /* Track.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Track.h; sourceTree = "<group>"; };
 		998A7513182CC7E500854904 /* Dtnode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Dtnode.cpp; sourceTree = "<group>"; };
@@ -79,6 +82,7 @@
 				998A7513182CC7E500854904 /* Dtnode.cpp */,
 				998A7516182CD98500854904 /* DtnodeLine.cpp */,
 				9959229A1831FECA007A6BBD /* Track.cpp */,
+				9913735A18360FB8005AB375 /* HttpRequestHandler.cpp */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -133,6 +137,7 @@
 		29B97315FDCFA39411CA2CEA /* Headers */ = {
 			isa = PBXGroup;
 			children = (
+				9913735B18360FB8005AB375 /* HttpRequestHandler.h */,
 				9959229B1831FECA007A6BBD /* Track.h */,
 				998A7517182CD98500854904 /* DtnodeLine.h */,
 				998A7514182CC7E500854904 /* Dtnode.h */,
@@ -221,6 +226,7 @@
 				998A7515182CC7E500854904 /* Dtnode.cpp in Sources */,
 				998A7518182CD98500854904 /* DtnodeLine.cpp in Sources */,
 				9959229C1831FECA007A6BBD /* Track.cpp in Sources */,
+				9913735C18360FB8005AB375 /* HttpRequestHandler.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
