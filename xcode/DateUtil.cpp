@@ -29,7 +29,7 @@ namespace DateUtil
             int yearspan = date2.year() - date1.year();
             if (pd2 < pd1)
                 yearspan -= 1;
-            
+            printf("\nyearspan: %d", yearspan);
             return yearspan;
         }
         catch(...)
@@ -47,9 +47,11 @@ namespace DateUtil
         try {
             if (isCurrentYear)
             {
-                int span = today.month() - gdate.month();
+                int span = today.month() - gdate.month() + 1;
+                printf("\nmonths in year: %d", span);
                 return span;
             }
+            printf("\nmonths in year: %d", 12);
             return 12;
             
         } catch (...) {
@@ -68,9 +70,10 @@ namespace DateUtil
             
             if (isCurrentMonth)
             {
-                days span = today - gdate;
-                return span.days();
+                printf("\ndays in %s: %d", gMonth.as_short_string(), (int)today.day() );
+                return today.day();
             }
+            printf("\ndays in %s: %d", gMonth.as_short_string(), (int)gdate.end_of_month().day() );
             return gdate.end_of_month().day();
             
         } catch (...) {

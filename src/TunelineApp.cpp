@@ -64,7 +64,7 @@ void TunelineApp::setup()
     //mParentPivot = Vec2f(0.0f, 0.0f);
 
 	mColor = Color(0.8f, 0.2f, 0.3f);
-    mLevelOnLaunch = YEAR;
+    mLevelOnLaunch = DAY;
     mCurrentLevel = mLevelOnLaunch;
     mDoubleClickFlag = 1;
     mLastClockReading = getElapsedSeconds();

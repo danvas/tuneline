@@ -89,11 +89,11 @@ void DtnodeLine::setLineResolution(int level)
             mResolution = DateUtil::getYearspan(mBirthdate, mToday);
             break;
         case 3:// months
-            mResolution = DateUtil::getMonthspan( greg_year(1994) );
+            mResolution = DateUtil::getMonthspan( greg_year(2013) );
             break;
         case 4:// days
-            greg_year someYear = greg_year(1994);
-            greg_month someMonth = greg_month(Apr);
+            greg_year someYear = greg_year(2013);
+            greg_month someMonth = greg_month(Nov);
             mResolution = DateUtil::getDayspan(someYear, someMonth);
             break;
     }
