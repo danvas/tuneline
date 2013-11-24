@@ -11,4 +11,9 @@
 
 #include <iostream>
 
+class HttpRequestHandler
+{
+    HttpRequestHandler();
+};
+
 #endif /* defined(__Tuneline__HttpRequestHandler__) */

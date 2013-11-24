@@ -15,15 +15,21 @@
 using namespace ci;
 Dtnode::Dtnode(){}
 
-Dtnode::Dtnode(Vec2f pos, float size)
+Dtnode::Dtnode(unsigned int level, Vec2f pos, float size)
 {
+    mLevel = level;
     mPos = pos;
     mSize = size;
 }
 
-void Dtnode::update(Color color)
+void Dtnode::update(Color color, Vec2f translate)
 {
     mColor = color;
+    if( isInsideNode(translate) )
+    {
+        mPos = translate;
+    }
+    
 }
 
 void Dtnode::draw()

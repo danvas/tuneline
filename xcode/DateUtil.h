@@ -14,28 +14,12 @@
 
 #include <iostream>
 #include <string>
-
-class DateUtil {
-public:
-    DateUtil();
-    boost::gregorian::date getDate();
-    void setDate(std::string localDate);
-    void setDate(boost::gregorian::greg_year,
-                     boost::gregorian::greg_month,
-                     boost::gregorian::greg_day);
-    
-    unsigned int yearsSince(std::string);
-
-    unsigned int daysSince(std::string);
-
-    
-private:
-    boost::gregorian::date mDate;
-    unsigned int mDay;
-    unsigned int mMonth;
-    unsigned int mYear;
-    
-};
+namespace DateUtil {
+    int getYearspan(boost::gregorian::date, boost::gregorian::date);
+    int getMonthspan(boost::gregorian::greg_year);
+    int getDayspan(boost::gregorian::greg_year, boost::gregorian::greg_month);
+    long daysThisYear();
+}
 
 
 #endif /* defined(__Tuneline__DateHandler__) */

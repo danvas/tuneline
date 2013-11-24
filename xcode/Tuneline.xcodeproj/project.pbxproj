@@ -23,6 +23,7 @@
 		9959229C1831FECA007A6BBD /* Track.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9959229A1831FECA007A6BBD /* Track.cpp */; };
 		998A7515182CC7E500854904 /* Dtnode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 998A7513182CC7E500854904 /* Dtnode.cpp */; };
 		998A7518182CD98500854904 /* DtnodeLine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 998A7516182CD98500854904 /* DtnodeLine.cpp */; };
+		99B6DDE61839CA3800ECD46D /* DateUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 99B6DDE41839CA3800ECD46D /* DateUtil.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,6 +53,8 @@
 		998A7514182CC7E500854904 /* Dtnode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Dtnode.h; sourceTree = "<group>"; };
 		998A7516182CD98500854904 /* DtnodeLine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DtnodeLine.cpp; sourceTree = "<group>"; };
 		998A7517182CD98500854904 /* DtnodeLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DtnodeLine.h; sourceTree = "<group>"; };
+		99B6DDE41839CA3800ECD46D /* DateUtil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DateUtil.cpp; sourceTree = "<group>"; };
+		99B6DDE51839CA3800ECD46D /* DateUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DateUtil.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,6 +86,7 @@
 				998A7516182CD98500854904 /* DtnodeLine.cpp */,
 				9959229A1831FECA007A6BBD /* Track.cpp */,
 				9913735A18360FB8005AB375 /* HttpRequestHandler.cpp */,
+				99B6DDE41839CA3800ECD46D /* DateUtil.cpp */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -137,6 +141,7 @@
 		29B97315FDCFA39411CA2CEA /* Headers */ = {
 			isa = PBXGroup;
 			children = (
+				99B6DDE51839CA3800ECD46D /* DateUtil.h */,
 				9913735B18360FB8005AB375 /* HttpRequestHandler.h */,
 				9959229B1831FECA007A6BBD /* Track.h */,
 				998A7517182CD98500854904 /* DtnodeLine.h */,
@@ -227,6 +232,7 @@
 				998A7518182CD98500854904 /* DtnodeLine.cpp in Sources */,
 				9959229C1831FECA007A6BBD /* Track.cpp in Sources */,
 				9913735C18360FB8005AB375 /* HttpRequestHandler.cpp in Sources */,
+				99B6DDE61839CA3800ECD46D /* DateUtil.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

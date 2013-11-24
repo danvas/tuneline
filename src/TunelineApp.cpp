@@ -2,7 +2,6 @@
 #include "cinder/gl/gl.h"
 #include "cinder/Vector.h"
 #include "DtnodeLine.h"
-#include "DateUtil.h"
 
 #include <string>
 #include <time.h>
@@ -13,12 +12,13 @@
 
 #define DOUBLE_CLICK_INTERVAL 0.30 //seconds
 
-// age
-#define AGE 32
+//For testing
+#define BDAY_INPUT "1981-02-23"
 
 using namespace ci;
 using namespace ci::app;
 using namespace std;
+using namespace boost::gregorian;
 
 class TunelineApp : public AppBasic {
   public:
@@ -31,33 +31,25 @@ class TunelineApp : public AppBasic {
     void mouseDrag(MouseEvent);
 	void update();
 	void draw();
-    
-    void setTimeUnits(int, int, int);
 
     void testFunc(string);
     void levelUp();
     void levelDown();
-    int getLevelResolution(int);
     
     
+    // Member variables
     DtnodeLine mDtnodeLine;
-    DateUtil mDate;
     
     Color mColor;
     Vec2i mMouseLoc;
-    int mCurrentView;
-    int decades;
-    int years;
-    int months;
-    int days;
-    enum mLevel {LIFE, DECADE, YEAR, MONTH, DAY};
-    unsigned int mLevelOnLaunch;
-    
-    unsigned int mDoubleClickFlag;
-    double mLastClockReading;
-    
+    int mCurrentLevel;
     
 
+    enum {LIFE, DECADE, YEAR, MONTH, DAY};
+    unsigned int mLevelOnLaunch;
+    Vec2f mParentPivot;
+    unsigned int mDoubleClickFlag;
+    double mLastClockReading;
 };
 
 void TunelineApp::prepareSettings( Settings *settings )
@@ -68,17 +60,15 @@ void TunelineApp::prepareSettings( Settings *settings )
 
 void TunelineApp::setup()
 {
-    //printf("years since 1981-Feb-23: %d", mDate.yearsSince("1981-02-23"));
-    setTimeUnits(1981, 2, 23);
-    
-    
+    mParentPivot = Vec2f(WINDOW_WIDTH/2.0f, WINDOW_HEIGHT/2.0f);
+    //mParentPivot = Vec2f(0.0f, 0.0f);
+
 	mColor = Color(0.8f, 0.2f, 0.3f);
     mLevelOnLaunch = YEAR;
-    mCurrentView = mLevelOnLaunch;
+    mCurrentLevel = mLevelOnLaunch;
     mDoubleClickFlag = 1;
     mLastClockReading = getElapsedSeconds();
-    int resolution = getLevelResolution(mLevelOnLaunch);
-    mDtnodeLine = DtnodeLine(mLevelOnLaunch, resolution);
+    mDtnodeLine = DtnodeLine(BDAY_INPUT, mLevelOnLaunch, mParentPivot);
 }
 
 void TunelineApp::mouseDown( MouseEvent event )
@@ -86,7 +76,7 @@ void TunelineApp::mouseDown( MouseEvent event )
 
     doubleClickLeft();
     Dtnode node = mDtnodeLine.getNodeAtPosition( event.getPos() );
-    cout << "clicked at " << node.getPosition() <<endl;
+    cout << "\nclicked at " << node.getPosition() <<endl;
     
 }
 
@@ -126,19 +116,23 @@ void TunelineApp::doubleClickLeft()
     mLastClockReading = thisClockReading;
 }
 
-void TunelineApp::mouseMove( MouseEvent event ) {
+void TunelineApp::mouseMove( MouseEvent event )
+{
     mMouseLoc = event.getPos();
 }
 
-void TunelineApp::mouseDrag( MouseEvent event ) {
+void TunelineApp::mouseDrag( MouseEvent event )
+{
+    mParentPivot = event.getPos();
     mouseMove( event );
+    console() << "You dragged the mouse @ " << mParentPivot << endl;
 }
 
 
 void TunelineApp::update()
 {
     
-    mDtnodeLine.update(mColor);
+    mDtnodeLine.update(mColor, mParentPivot);
 }
 
 void TunelineApp::draw()
@@ -150,42 +144,6 @@ void TunelineApp::draw()
 
 }
 
-void TunelineApp::setTimeUnits(int year, int month, int day)
-{
-    time_t timer;
-    struct tm y2k;
-    double seconds;
-    
-    y2k.tm_hour = 0;   y2k.tm_min = 0; y2k.tm_sec = 0;
-    y2k.tm_year = year - 1900; y2k.tm_mon = month; y2k.tm_mday = day;
-    
-    time(&timer);  /* get current time; same as: timer = time(NULL)  */
-    
-    seconds = difftime(timer,mktime(&y2k));
-    
-    
-    printf ("\n%.f seconds since  %d, %d in the current timezone", seconds, y2k.tm_mday, year);
-    
-    int thisYear = 2013;
-    years = thisYear - year;
-    decades = years/10;
-    months = 12;
-    days = 30;
-    printf("\nTime units set:\ndecades = %d\nyears = %d\nmonths = %d\ndays = %d", decades, years, months, days);
-    printf("\nTimestamp units:\nyears = %d\nmonths = %d\ndays = %d", y2k.tm_year, y2k.tm_mon, y2k.tm_mday);
-    
-    
-    //Current time
-    time_t rawtime;
-    struct tm * timeinfo;
-    
-    time ( &rawtime );
-    timeinfo = localtime ( &rawtime );
-    printf ( "\nThe current date/time is: %s", asctime(timeinfo) );
-    
-    
-    
-}
 
 void TunelineApp::testFunc(string str)
 {
@@ -196,46 +154,22 @@ void TunelineApp::testFunc(string str)
 void TunelineApp::levelUp()
 {
     
-    if ( mCurrentView != DAY )
+    if ( mCurrentLevel != DAY )
     {
-        mCurrentView += 1;
+        mCurrentLevel += 1;
     }
-    cout << "up key. View " << mCurrentView << endl;
+    cout << "up key. View " << mCurrentLevel << endl;
 }
 
 void TunelineApp::levelDown()
 {
-    if ( mCurrentView != LIFE )
+    if ( mCurrentLevel != LIFE )
     {
-        mCurrentView -= 1;
+        mCurrentLevel -= 1;
     }
-    cout << "down key. View " << mCurrentView << endl;
+    cout << "down key. View " << mCurrentLevel << endl;
 }
 
-int TunelineApp::getLevelResolution(int level)
-{
-    int res = 1;
-    switch (level) {
-        case 0:
-            break;
-        case 1:
-            res = decades;
-            break;
-        case 2:
-            res = years;
-            break;
-        case 3:
-            res = months;
-            break;
-        case 4:
-            res = days;
-            break;   
-        default:
-            res = -1;
-            break;
-    }
-    return res;
-}
 
 
 CINDER_APP_BASIC( TunelineApp, RendererGl )

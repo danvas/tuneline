@@ -8,34 +8,38 @@
 
 #include "DtnodeLine.h"
 #include "cinder/app/AppBasic.h"
+#include "DateUtil.h"
 
 
 
 using namespace ci;
 using namespace std;
+using namespace boost::gregorian;
 
 DtnodeLine::DtnodeLine(){}
 
-DtnodeLine::DtnodeLine( int res )
+DtnodeLine::DtnodeLine( string bdate, unsigned int level, Vec2f pivot )
 {
-    mXRes = app::getWindowWidth()/2.0f;
-    cout << "mXRes = " << mXRes << endl;
-	mYRes = app::getWindowHeight()/res;
-	cout << "mYRes = " << mYRes << endl;
-    
+    mToday = day_clock::local_day();
+    mBirthdate = from_simple_string(bdate);
+    setLineResolution(level);
+    mXRes = pivot.x;
+	mYSpacing = pivot.y;
+    printf("\nmYSpacing = %d", mYSpacing);
+
     sizeOffset = 0.5f;
     
-	for( int y=0; y<mYRes; y++ )
+	for( int y = 0; y < mResolution; y++ )
     {
-        addDtnode( mXRes, y, res );
+        addDtnode( level, mXRes, y, mYSpacing );
 	}
 }
 
-void DtnodeLine::update(Color color)
+void DtnodeLine::update(Color color, Vec2f pivot)
 {    
     for(int i = 0; i < mDtnodes.size(); i++)
     {
-        mDtnodes[i].update(color);
+        mDtnodes[i].update(color, pivot);
     }
 }
 
@@ -49,11 +53,13 @@ void DtnodeLine::draw()
     
 }
 
-void DtnodeLine::addDtnode( int xi, int yi, int res )
+void DtnodeLine::addDtnode( unsigned int level, int xi, int yi, int spacing )
 {
-    float size = res/2.0f * sizeOffset;
-	float y = ( yi + 0.5f ) * (float)res;
-	mDtnodes.push_back( Dtnode( Vec2f( xi, y ), size ) );
+    float size = spacing/2.0f * sizeOffset;
+    
+	float y = ( yi * (float)spacing );
+    //printf("\ny = %f", y);
+	mDtnodes.push_back( Dtnode( level, Vec2f( xi, y ), size ) );
 }
 
 Dtnode DtnodeLine::getNodeAtPosition(Vec2i position)
@@ -70,9 +76,27 @@ Dtnode DtnodeLine::getNodeAtPosition(Vec2i position)
     }
     return node;
 }
-
-void DtnodeLine::expandDtnode (Dtnode dtnode)
+void DtnodeLine::setLineResolution(int level)
 {
-    
+    mResolution = 1;
+    switch (level) {
+        case 0:// life
+            break;
+        case 1:// decades
+            mResolution = (int)ceil( DateUtil::getYearspan(mBirthdate, mToday)/10.0f );
+            break;
+        case 2:// years
+            mResolution = DateUtil::getYearspan(mBirthdate, mToday);
+            break;
+        case 3:// months
+            mResolution = DateUtil::getMonthspan( greg_year(1994) );
+            break;
+        case 4:// days
+            greg_year someYear = greg_year(1994);
+            greg_month someMonth = greg_month(Apr);
+            mResolution = DateUtil::getDayspan(someYear, someMonth);
+            break;
+    }
 }
+
 

@@ -18,8 +18,8 @@
 class Dtnode {
 public:
     Dtnode();
-    Dtnode(ci::Vec2f, float);
-    void update(ci::Color );
+    Dtnode(unsigned int, ci::Vec2f, float);
+    void update(ci::Color, ci::Vec2f);
     void draw();
 
     
@@ -29,6 +29,7 @@ public:
     
     float mSize;
     ci::Color mColor;
+    unsigned int mLevel;
     
 private:
     std::vector<Track> tracks;

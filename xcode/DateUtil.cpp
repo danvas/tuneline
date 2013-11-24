@@ -6,11 +6,10 @@
 //
 //
 // Credit:
-// Pukku at stackoverflow.com
+//  yearsSince() impl by Pukku at stackoverflow.com
 
 #include "DateUtil.h"
 #include "cinder/Cinder.h"
-
 
 #include <string>
 
@@ -18,112 +17,78 @@ using namespace std;
 using namespace ci;
 using namespace boost::gregorian;
 
-
-
-DateUtil::DateUtil(){
-    date today = day_clock::local_day();
-    date::ymd_type ymd = today.year_month_day();
-    setDate(ymd.year, ymd.month, ymd.day);
-    cout << "\ndate created: " << to_simple_string(today) << endl;
-}
-
-date DateUtil::getDate()
+namespace DateUtil
 {
-    return mDate;
-}
-
-void DateUtil::setDate(string localDate)
-{
-    try {
-        date aDate(from_simple_string(localDate));
-        mDate = aDate;
-        mYear = mDate.year();
-        mMonth = mDate.month();
-        mDay = mDate.day();
-        
-    } catch (...) {
-        cout << "\nBad date entered: " << localDate << endl;
-        cout << "Date must be in format yyyy-mm-dd" << endl;
-    }
-    
-}
-
-void DateUtil::setDate(greg_year gYear, greg_month gMon, greg_day gDay)
-{
-    try {
-        date aDate(gYear, gMon, gDay);
-        mDate = aDate;
-        mYear = mDate.year();
-        mMonth = mDate.month();
-        mDay = mDate.day();
-        
-    } catch (...) {
-        cout << "Date must be passed in as (boost::gregorian::greg_year, boost::gregorian::greg_month, boost::gregorian::greg_day)" << endl;
-    }
-    
-}
-
-
-unsigned int DateUtil::yearsSince(string aDate)
-{
-    try {
-        //Implementation by Pukku
-        date date1 = from_simple_string(aDate);
-        if (date1 > mDate)
-            std::swap(date1, mDate); // guarantee that d2 >= d1
-        
-        partial_date pd1(date1.day(), date1.month());
-        partial_date pd2(mDate.day(), mDate.month());
-        
-        int fullYearsInBetween = mDate.year() - date1.year();
-        if (date1 > mDate)
-            fullYearsInBetween -= 1;
-        
-        return fullYearsInBetween;
-        
-    }
-    catch(...)
+    int getYearspan(date date1, date date2)
     {
-        cout << "\nBad date entered: " << aDate << endl;
-        cout << "Date must be in format yyyy-mm-dd" << endl;
-        return 0;
-    }
+        try
+        {
+            partial_date pd1(date1.day(), date1.month());
+            partial_date pd2(date2.day(), date2.month());
 
-}
-
-
-
-unsigned int DateUtil::daysSince(string bdate)
-{
-    try {
-        date birthday(from_simple_string(bdate));
-        days days_alive = mDate - birthday;
-        days one_day(1);
-        if (days_alive == one_day) {
-            std::cout << "Born yesterday, very funny" << std::endl;
-            return 0;
-        }
-        else if (days_alive < days(0)) {
-            std::cout << "Not born yet, hmm: " << days_alive.days()
-            << " days" <<std::endl;
-            return 0;
-        }
-        else {
-            std::cout << "Days alive: " << days_alive.days() << std::endl;
-            //cout << "oneyr = " << oneyr << endl;
-            return (unsigned int)days_alive.days();
+            int yearspan = date2.year() - date1.year();
+            if (pd2 < pd1)
+                yearspan -= 1;
             
-            
+            return yearspan;
+        }
+        catch(...)
+        {
+            return 0;
         }
         
     }
-    catch(...) {
-        cout << "\nBad date entered: " << bdate << endl;
-        cout << "Date must be in format yyyy-mm-dd" << endl;
-        return 0;
+    
+    int getMonthspan(greg_year gYear)
+    {
+        date gdate = date(gYear, Jan, 1);
+        date today = day_clock::local_day();
+        bool isCurrentYear = gYear == today.year();
+        try {
+            if (isCurrentYear)
+            {
+                int span = today.month() - gdate.month();
+                return span;
+            }
+            return 12;
+            
+        } catch (...) {
+            printf("caught exception when calling DateUtil::getDayspan()");
+            return 0;
+        }
     }
 
+    int getDayspan(greg_year gYear, greg_month gMonth)
+    {
+        date gdate = date(gYear, gMonth, 1);
+        date today = day_clock::local_day();
+        bool isCurrentMonth = ( gMonth  == today.month() &&
+                                gYear   == today.year()     );
+        try {
+            
+            if (isCurrentMonth)
+            {
+                days span = today - gdate;
+                return span.days();
+            }
+            return gdate.end_of_month().day();
+            
+        } catch (...) {
+            printf("caught exception when calling DateUtil::getDayspan()");
+            return 0;
+        } 
+    }
+    
+    
+    
+    long daysThisYear()
+    {
+        date today = day_clock::local_day();
+        date_period range( date(today.year(), Jan, 1), today );
+        return range.length().days() + 1;
+    }
 }
+
 
 
 
