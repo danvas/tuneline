@@ -9,51 +9,54 @@
 #include "cinder/app/AppBasic.h"
 #include "cinder/gl/gl.h"
 
+#include "DateUtil.h"
 #include "Track.h"
 
 
 using namespace ci;
+using namespace ci::app;
+using namespace boost::gregorian;
+
+
 Dtnode::Dtnode(){}
 
-Dtnode::Dtnode(unsigned int level, Vec2f pos, float size)
+Dtnode::Dtnode(date aDate, Vec2i pos, float size)   
 {
-    mLevel = level;
-    mPos = pos;
+    mDate = aDate;
+    position = pos;
     mSize = size;
+    mDirToPivot = Vec2f::zero();
+    mColor = Color(0.8f, 0.2f, 0.3f);
 }
 
-void Dtnode::update(Color color, Vec2f translate)
+void Dtnode::update(Color color, Vec2f pivot)
 {
-    mColor = color;
-    if( isInsideNode(translate) )
-    {
-        mPos = translate;
-    }
     
+    mDirToPivot = pivot - position;
+    //console() << "DirToPivot = " << mDirToPivot << std::endl;
+    mDirToPivot.safeNormalize();
+    mColor = color;
 }
 
 void Dtnode::draw()
 {
     gl::color( mColor);
-    gl::drawSolidEllipse(mPos, mSize, mSize);
+    gl::drawSolidEllipse(position, mSize, mSize);
     
 }
 
 
-void Dtnode::addTrack( Track track )
-{
-    
+void Dtnode::setPosition(Vec2f pos){
+    position = pos;
 }
 
-Vec2i Dtnode::getPosition()
-{
-    return mPos;
-}
 
 bool Dtnode::isInsideNode(Vec2i pos)
 {
-    return pow((pos.x - mPos.x), 2.0) + pow((pos.y - mPos.y), 2.0) < pow(mSize, 2.0);
+    return pow((pos.x - position.x), 2.0) + pow((pos.y - position.y), 2.0) < pow(mSize, 2.0);
 }
+
+
 
 
 

@@ -2,18 +2,22 @@
 #include "cinder/gl/gl.h"
 #include "cinder/Vector.h"
 #include "DtnodeLine.h"
+#include "DateUtil.h"
 
 #include <string>
+#include <vector>
 #include <time.h>
 
 // iPad dimensions
 #define WINDOW_WIDTH 800
-#define WINDOW_HEIGHT 1024
-
+#define WINDOW_HEIGHT 1004
+#define MAX_TIMELINES 4
 #define DOUBLE_CLICK_INTERVAL 0.30 //seconds
 
 //For testing
 #define BDAY_INPUT "1981-02-23"
+
+
 
 using namespace ci;
 using namespace ci::app;
@@ -25,7 +29,7 @@ class TunelineApp : public AppBasic {
     void prepareSettings(Settings*);
 	void setup();
 	void mouseDown(MouseEvent);
-    void doubleClickLeft();
+    void doubleClickLeft(MouseEvent&);
     void keyDown(KeyEvent);
     void mouseMove(MouseEvent);
     void mouseDrag(MouseEvent);
@@ -36,67 +40,60 @@ class TunelineApp : public AppBasic {
     void levelUp();
     void levelDown();
     
+    void testDateUtil(string);
+    
     
     // Member variables
     DtnodeLine mDtnodeLine;
+    DtnodeLine mLines[MAX_TIMELINES];
     
-    Color mColor;
     Vec2i mMouseLoc;
     int mCurrentLevel;
+    bool mMouseOnNode;
     
 
     enum {LIFE, DECADE, YEAR, MONTH, DAY};
     unsigned int mLevelOnLaunch;
-    Vec2f mParentPivot;
+    Vec2f mPivot;
     unsigned int mDoubleClickFlag;
     double mLastClockReading;
 };
 
 void TunelineApp::prepareSettings( Settings *settings )
 {
-	settings->setWindowSize( WINDOW_WIDTH, WINDOW_HEIGHT ); 
+    settings->setWindowSize( 1, 1 );
+//	settings->setWindowSize( WINDOW_WIDTH, WINDOW_HEIGHT ); 
 	settings->setFrameRate( 60.0f );
 }
 
 void TunelineApp::setup()
 {
-    mParentPivot = Vec2f(WINDOW_WIDTH/2.0f, WINDOW_HEIGHT/2.0f);
-    //mParentPivot = Vec2f(0.0f, 0.0f);
-
-	mColor = Color(0.8f, 0.2f, 0.3f);
-    mLevelOnLaunch = DAY;
+    testDateUtil(BDAY_INPUT);
+//    mPivot = Vec2f(WINDOW_WIDTH/2.0f, WINDOW_HEIGHT/2.0f);
+    mPivot = Vec2f(WINDOW_WIDTH/2.0f, 0.0f);
+    
+    mLevelOnLaunch = LIFE;
     mCurrentLevel = mLevelOnLaunch;
+    mMouseOnNode = false;
     mDoubleClickFlag = 1;
     mLastClockReading = getElapsedSeconds();
-    mDtnodeLine = DtnodeLine(BDAY_INPUT, mLevelOnLaunch, mParentPivot);
+    mDtnodeLine = DtnodeLine(BDAY_INPUT, mLevelOnLaunch, mPivot);
+    mLines[mLevelOnLaunch] = mDtnodeLine;
+    console() << "\nPivot started at " << mPivot << endl;
 }
 
 void TunelineApp::mouseDown( MouseEvent event )
 {
 
-    doubleClickLeft();
-    Dtnode node = mDtnodeLine.getNodeAtPosition( event.getPos() );
-    cout << "\nclicked at " << node.getPosition() <<endl;
+    doubleClickLeft(event);
+    
     
 }
 
-
-void TunelineApp::keyDown( KeyEvent event )
-{
-    if ( event.getCode() == KeyEvent::KEY_DOWN )
-    {
-        levelDown();
-    }
-    
-    if ( event.getCode() == KeyEvent::KEY_UP )
-    {
-        levelUp();
-    }
-}
 /*
  * Double click function by chrisjeffdotcom on Cinder forum
  */
-void TunelineApp::doubleClickLeft()
+void TunelineApp::doubleClickLeft( MouseEvent &event)
 {
     double thisClockReading = getElapsedSeconds();
     double interval = thisClockReading - mLastClockReading;
@@ -105,8 +102,10 @@ void TunelineApp::doubleClickLeft()
     {
         
         cout << "\ndouble clicked! ";
-        cout << "interval = " << interval;
-        testFunc("yep");
+        cout << "interval = " << interval << endl;
+        Dtnode node = mDtnodeLine.getNodeAtPosition( event.getPos(), &mMouseOnNode );
+        cout << "\nmMouseOnNode = " << mMouseOnNode << endl;
+        if(mMouseOnNode) cout << "\nclicked on node " << node.mDate <<endl;
         mDoubleClickFlag = 1;
     }
     else
@@ -123,25 +122,46 @@ void TunelineApp::mouseMove( MouseEvent event )
 
 void TunelineApp::mouseDrag( MouseEvent event )
 {
-    mParentPivot = event.getPos();
-    mouseMove( event );
-    console() << "You dragged the mouse @ " << mParentPivot << endl;
+    mouseMove(event);
 }
 
+void TunelineApp::keyDown( KeyEvent event )
+{
+    if ( event.getCode() == KeyEvent::KEY_DOWN )
+    {
+        levelDown();
+    }
+    
+    if ( event.getCode() == KeyEvent::KEY_UP )
+    {
+        levelUp();
+    }
+}
 
 void TunelineApp::update()
 {
+//    for(int i = 0; i < MAX_TIMELINES; i++){
+//        mLines[i].update();
+//    }
     
-    mDtnodeLine.update(mColor, mParentPivot);
+    
 }
 
 void TunelineApp::draw()
 {
 	// clear out the window with black
 	gl::clear( Color( 0.96f, 0.96f, 0.9f ) );
-    mDtnodeLine.draw();
+    for(int i = 0; i < MAX_TIMELINES; i++){
+//        cout << "line " << i << ": "<< mLines[i].mLevel << endl;
+//        mLines[i].draw();
+    }
+//    gl::pushModelView();
+//    gl::translate( Vec3f(getWindowWidth()/2,getWindowHeight()/2,0) );
+//    gl::rotate( Vec3f(35,20,0) );
+//    gl::drawCube( Vec3f::zero(), Vec3f(100,100,100) );
+//    gl::popModelView();
+//    gl::clear( Color( 0, 0, 0 ) );
     
-
 }
 
 
@@ -153,10 +173,12 @@ void TunelineApp::testFunc(string str)
 
 void TunelineApp::levelUp()
 {
+    Vec2f TEMP_offset =Vec2f(30.0f, 30.0f);
     
     if ( mCurrentLevel != DAY )
     {
-        mCurrentLevel += 1;
+        mCurrentLevel++;
+        mLines[mCurrentLevel] = DtnodeLine(BDAY_INPUT, mCurrentLevel, mPivot + TEMP_offset);
     }
     cout << "up key. View " << mCurrentLevel << endl;
 }
@@ -165,9 +187,26 @@ void TunelineApp::levelDown()
 {
     if ( mCurrentLevel != LIFE )
     {
-        mCurrentLevel -= 1;
+        //mCurrentLevel -= 1;
+        mDtnodeLine = mLines[--mCurrentLevel];
     }
     cout << "down key. View " << mCurrentLevel << endl;
+}
+
+void TunelineApp::testDateUtil(string dateStr){
+    date today = day_clock::local_day();
+    date birthdate = from_simple_string(dateStr);
+    cout << "******************** DateUtil test output **************************" << endl;
+    cout << "today: " << today << endl;
+    cout << "birthdate: " << birthdate << endl;
+    
+    cout << birthdate.year() << " – " << today.year() <<" years: " << DateUtil::getYearspan(birthdate, today) << endl;
+    cout << "2013 months: " << DateUtil::getMonthspan( greg_year(2013) ) << endl;
+    cout << "Dec 2013 days: " << DateUtil::getDayspan( greg_year(2013), greg_month(12) ) << endl;
+    
+    cout << "*************************************************************" << endl;
+
+
 }
 
 

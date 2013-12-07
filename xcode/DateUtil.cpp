@@ -6,7 +6,7 @@
 //
 //
 // Credit:
-//  yearsSince() impl by Pukku at stackoverflow.com
+
 
 #include "DateUtil.h"
 #include "cinder/Cinder.h"
@@ -19,6 +19,8 @@ using namespace boost::gregorian;
 
 namespace DateUtil
 {
+
+    //  impl by Pukku at stackoverflow.com
     int getYearspan(date date1, date date2)
     {
         try
@@ -29,7 +31,6 @@ namespace DateUtil
             int yearspan = date2.year() - date1.year();
             if (pd2 < pd1)
                 yearspan -= 1;
-            printf("\nyearspan: %d", yearspan);
             return yearspan;
         }
         catch(...)
@@ -48,10 +49,10 @@ namespace DateUtil
             if (isCurrentYear)
             {
                 int span = today.month() - gdate.month() + 1;
-                printf("\nmonths in year: %d", span);
+                //printf("\nmonths in year: %d", span);
                 return span;
             }
-            printf("\nmonths in year: %d", 12);
+            //printf("\nmonths in year: %d", 12);
             return 12;
             
         } catch (...) {
@@ -70,10 +71,10 @@ namespace DateUtil
             
             if (isCurrentMonth)
             {
-                printf("\ndays in %s: %d", gMonth.as_short_string(), (int)today.day() );
+                //printf("\ndays in %s: %d", gMonth.as_short_string(), (int)today.day() );
                 return today.day();
             }
-            printf("\ndays in %s: %d", gMonth.as_short_string(), (int)gdate.end_of_month().day() );
+            //printf("\ndays in %s: %d", gMonth.as_short_string(), (int)gdate.end_of_month().day() );
             return gdate.end_of_month().day();
             
         } catch (...) {
@@ -90,6 +91,25 @@ namespace DateUtil
         date_period range( date(today.year(), Jan, 1), today );
         return range.length().days() + 1;
     }
+    
+    int getLineResolution(date aDate, int level){
+        switch (level) {
+            case 0:// life
+                return 1;
+            case 1:// decades
+                return (int)ceil( DateUtil::getYearspan( aDate, day_clock::local_day() )/10.0f );
+            case 2:// years
+                return getYearspan( aDate, day_clock::local_day() );
+            case 3:// months
+                return getMonthspan( greg_year(2013) );
+            case 4:// days
+                greg_year someYear = greg_year(2013);
+                greg_month someMonth = greg_month(Nov);
+                return DateUtil::getDayspan(someYear, someMonth);
+        }
+    }
+
+    
 }
 
 

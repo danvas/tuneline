@@ -15,25 +15,32 @@
 #include <list>
 #include <vector>
 
+#define MAX_NODES 40
+#define TWEEN_SPEED 0.15
+
 class DtnodeLine {
 public:
     DtnodeLine();
     DtnodeLine( std::string, unsigned int, ci::Vec2f);
     
-    void update(ci::Color, ci::Vec2f);
+    void update();
     
     void draw();
-    void addDtnode( unsigned int, int, int, int );
     void setLineResolution(int);
-    Dtnode getNodeAtPosition(ci::Vec2i);
+    Dtnode getNodeAtPosition(ci::Vec2f, bool*);
     int getLineResolution(int);
     std::vector<Dtnode> mDtnodes;
     
-    int mXRes, mYSpacing;
+    int mSpacing;
+    unsigned int mLevel;
 private:
-    float sizeOffset;
     boost::gregorian::date mToday;
     boost::gregorian::date mBirthdate;
     int mResolution;
+    ci::Vec2f mDirToPivot;
+    
+    ci::Vec2f startPosition[MAX_NODES];
+    ci::Vec2f targetPosition[MAX_NODES];
+    float circleTimeBase[MAX_NODES];
 };
 

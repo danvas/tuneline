@@ -9,10 +9,13 @@
 #include "DtnodeLine.h"
 #include "cinder/app/AppBasic.h"
 #include "DateUtil.h"
+#include "cinder/Rand.h"
+#include "cinder/Easing.h"
 
-
+#define CIRCLE_RADIUS 15.0f
 
 using namespace ci;
+using namespace cinder::app;
 using namespace std;
 using namespace boost::gregorian;
 
@@ -23,46 +26,129 @@ DtnodeLine::DtnodeLine( string bdate, unsigned int level, Vec2f pivot )
     mToday = day_clock::local_day();
     mBirthdate = from_simple_string(bdate);
     setLineResolution(level);
-    mXRes = pivot.x;
-	mYSpacing = pivot.y;
-    printf("\nmYSpacing = %d", mYSpacing);
-
-    sizeOffset = 0.5f;
+    mLevel = level;
+	mSpacing = getWindowHeight() / mResolution;
     
-	for( int y = 0; y < mResolution; y++ )
+    float offsetY = pivot.y + mSpacing/2.0f;
+    int chosenNode = 0;
+    int enterNodeIndex = (chosenNode < mResolution? chosenNode : mResolution - 1);
+    console() << "enter other index? " << (enterNodeIndex? "yes" : "no") << endl;
+    
+    Vec2f currentPosition;
+    date incrDate;
+    if (enterNodeIndex)
     {
-        addDtnode( level, mXRes, y, mYSpacing );
-	}
+        console() << "Starting at index " << enterNodeIndex << endl;
+        offsetY = enterNodeIndex*mSpacing/2.0f;
+        
+        for(int i = 0; i<mResolution; i++)
+        {
+            currentPosition = Vec2f(pivot.x, pivot.y + offsetY);
+            mDtnodes.push_back( Dtnode( incrDate, currentPosition, CIRCLE_RADIUS ) );
+            
+            targetPosition[i].x = pivot.x;
+            targetPosition[i].y = (i - enterNodeIndex)*mSpacing + offsetY;
+            
+            startPosition[i].x = pivot.x;
+            startPosition[i].y = pivot.y + offsetY;
+            
+            console() << "current: " << mDtnodes[i].position << endl;
+            console() << "start: " << startPosition[i].y << endl;
+            console() << "target: " << targetPosition[i].y << endl << endl;
+
+            circleTimeBase[i] = 0;
+            
+            switch (level){
+                case 0:
+                    incrDate = mBirthdate;
+                    break;
+                case 1:
+                    incrDate = date(mBirthdate.year() + 10, mBirthdate.month(), mBirthdate.day());
+                    break;
+                case 2:
+                    incrDate = date(mBirthdate.year() + 1, mBirthdate.month(), mBirthdate.day());
+                    break;
+                case 3:
+                    incrDate = date(mBirthdate.year(), mBirthdate.month() + 1, mBirthdate.day());
+                    break;
+                case 4:
+                    incrDate = date(mBirthdate.year(), mBirthdate.month(), mBirthdate.day() + 1);
+                    break;
+            }
+        }
+    }
+    else
+    {
+        for(int i = 0; i<mResolution; i++)
+        {
+            currentPosition = Vec2f(pivot.x, pivot.y + offsetY);
+            mDtnodes.push_back( Dtnode( mBirthdate, currentPosition, CIRCLE_RADIUS ) );
+            
+            targetPosition[i].x = pivot.x;
+            targetPosition[i].y = i * mSpacing + offsetY;
+            
+            startPosition[i].x = pivot.x;
+            startPosition[i].y = pivot.y + offsetY;
+            
+            console() << "current: " << mDtnodes[i].position << endl;
+            console() << "start: " << startPosition[i].y << endl;
+            console() << "target: " << targetPosition[i].y << endl << endl;
+
+            circleTimeBase[i] = 0;
+            
+            switch (level){
+                case 0:
+                    incrDate = mBirthdate;
+                    break;
+                case 1:
+                    incrDate = date(mBirthdate.year() + 10, mBirthdate.month(), mBirthdate.day());
+                    break;
+                case 2:
+                    incrDate = date(mBirthdate.year() + 1, mBirthdate.month(), mBirthdate.day());
+                    break;
+                case 3:
+                    incrDate = date(mBirthdate.year(), mBirthdate.month() + 1, mBirthdate.day());
+                    break;
+                case 4:
+                    incrDate = date(mBirthdate.year(), mBirthdate.month(), mBirthdate.day() + 1);
+                    break;
+            }
+        }
+    }
+    
+
+    
+    
 }
 
-void DtnodeLine::update(Color color, Vec2f pivot)
-{    
-    for(int i = 0; i < mDtnodes.size(); i++)
-    {
-        mDtnodes[i].update(color, pivot);
+void DtnodeLine::update()
+{
+    
+    Vec2f currentPosition;
+    for (int i=0; i<mResolution; i++) {        
+        currentPosition = easeOutExpo((getElapsedSeconds()-circleTimeBase[i]) * TWEEN_SPEED) * (targetPosition[i] - startPosition[i]) + startPosition[i];
+        
+        mDtnodes[i].setPosition(currentPosition);
+        
+        if ( mDtnodes[i].position.distance(targetPosition[i]) < 1.0f ){
+            startPosition[i] = mDtnodes[i].position;
+            circleTimeBase[i] = getElapsedSeconds();  
+        }
     }
 }
 
 void DtnodeLine::draw()
 {
-    
-    for(int i = 0; i < mDtnodes.size(); i++)
+    gl::color( Color(0.8f, 0.2f, 0.3f));
+    for(int i = 0; i < mResolution; i++)
     {
         mDtnodes[i].draw();
     }
     
 }
 
-void DtnodeLine::addDtnode( unsigned int level, int xi, int yi, int spacing )
-{
-    float size = spacing/2.0f * sizeOffset;
-    
-	float y = ( yi * (float)spacing );
-    //printf("\ny = %f", y);
-	mDtnodes.push_back( Dtnode( level, Vec2f( xi, y ), size ) );
-}
 
-Dtnode DtnodeLine::getNodeAtPosition(Vec2i position)
+Dtnode DtnodeLine::getNodeAtPosition(Vec2f position, bool* onNode)
 {
     
     Dtnode node;
@@ -71,9 +157,13 @@ Dtnode DtnodeLine::getNodeAtPosition(Vec2i position)
         node = mDtnodes[i];
         if ( node.isInsideNode(position) )
         {
+            *onNode = true;
             break;
         }
+        *onNode = false;
     }
+    cout << "*onNode = " << *onNode << endl;
+    
     return node;
 }
 void DtnodeLine::setLineResolution(int level)
@@ -81,6 +171,7 @@ void DtnodeLine::setLineResolution(int level)
     mResolution = 1;
     switch (level) {
         case 0:// life
+            
             break;
         case 1:// decades
             mResolution = (int)ceil( DateUtil::getYearspan(mBirthdate, mToday)/10.0f );
@@ -98,5 +189,6 @@ void DtnodeLine::setLineResolution(int level)
             break;
     }
 }
+
 
 

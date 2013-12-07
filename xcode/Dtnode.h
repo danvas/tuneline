@@ -9,6 +9,7 @@
 #include "cinder/Vector.h"
 #include "cinder/Color.h"
 
+#include "DateUtil.h"
 #include "Track.h"
 
 #include <vector>
@@ -18,22 +19,18 @@
 class Dtnode {
 public:
     Dtnode();
-    Dtnode(unsigned int, ci::Vec2f, float);
+    Dtnode(boost::gregorian::date, ci::Vec2i, float);
     void update(ci::Color, ci::Vec2f);
     void draw();
 
-    
-    void addTrack( Track );
-    ci::Vec2i getPosition();
+    void move( ci::Vec2f );
+    void setPosition(ci::Vec2f);
     bool isInsideNode(ci::Vec2i);
     
+    boost::gregorian::date mDate;
+    ci::Vec2f position;
+    ci::Vec2f mDirToPivot;
     float mSize;
     ci::Color mColor;
-    unsigned int mLevel;
-    
-private:
-    std::vector<Track> tracks;
-    ci::Vec2f mPos;
-    
     
 };
