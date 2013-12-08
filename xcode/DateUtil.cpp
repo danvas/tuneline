@@ -106,7 +106,9 @@ namespace DateUtil
                 greg_year someYear = greg_year(2013);
                 greg_month someMonth = greg_month(Nov);
                 return DateUtil::getDayspan(someYear, someMonth);
+                
         }
+        return -1;
     }
 
     
