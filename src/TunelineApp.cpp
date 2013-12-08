@@ -1,4 +1,4 @@
-#include "cinder/app/AppBasic.h"
+#include "cinder/app/AppNative.h"
 #include "cinder/gl/gl.h"
 #include "cinder/Vector.h"
 #include "DtnodeLine.h"
@@ -61,14 +61,14 @@ class TunelineApp : public AppBasic {
 
 void TunelineApp::prepareSettings( Settings *settings )
 {
-    settings->setWindowSize( 1, 1 );
-//	settings->setWindowSize( WINDOW_WIDTH, WINDOW_HEIGHT ); 
+//    settings->setWindowSize( 1, 1 );
+	settings->setWindowSize( WINDOW_WIDTH, WINDOW_HEIGHT );
 	settings->setFrameRate( 60.0f );
 }
 
 void TunelineApp::setup()
 {
-    testDateUtil(BDAY_INPUT);
+//    testDateUtil(BDAY_INPUT);
 //    mPivot = Vec2f(WINDOW_WIDTH/2.0f, WINDOW_HEIGHT/2.0f);
     mPivot = Vec2f(WINDOW_WIDTH/2.0f, 0.0f);
     
@@ -192,6 +192,10 @@ void TunelineApp::levelDown()
     }
     cout << "down key. View " << mCurrentLevel << endl;
 }
+
+
+
+
 
 void TunelineApp::testDateUtil(string dateStr){
     date today = day_clock::local_day();

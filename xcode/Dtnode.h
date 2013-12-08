@@ -27,6 +27,7 @@ public:
     void setPosition(ci::Vec2f);
     bool isInsideNode(ci::Vec2i);
     
+    
     boost::gregorian::date mDate;
     ci::Vec2f position;
     ci::Vec2f mDirToPivot;
