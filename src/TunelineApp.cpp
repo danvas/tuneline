@@ -78,9 +78,6 @@ void TunelineApp::setup()
     mLastClockReading = getElapsedSeconds();
     mDtnodeLine = DtnodeLine(BDAY_INPUT, mLevelOnLaunch, mPivot);
     mLines[mLevelOnLaunch] = mDtnodeLine;
-    for (int i = 0; i < MAX_TIMELINES; i++){
-        mLines[i] = DtnodeLine(BDAY_INPUT, i, mPivot + Vec2f(i*50.0f, 0));
-    }
     console() << "\nPivot started at " << mPivot << endl;
 }
 
