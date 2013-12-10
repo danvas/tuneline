@@ -63,7 +63,8 @@ Dtnode DtnodeLine::getNodeAtPosition(Vec2f position, bool* onNode)
 {
     
     Dtnode node;
-    for(int i = 0; i < mDtnodes.size(); i++)
+    int i;
+    for(i = 0; i < mDtnodes.size(); i++)
     {
         node = mDtnodes[i];
         if ( node.isInsideNode(position) )
@@ -73,9 +74,27 @@ Dtnode DtnodeLine::getNodeAtPosition(Vec2f position, bool* onNode)
         }
         *onNode = false;
     }
-    cout << "*onNode = " << *onNode << endl;
     
     return node;
+}
+
+int DtnodeLine::getNodeIndexAtPosition(Vec2f position, bool* onNode)
+{
+    
+    Dtnode node;
+    int i;
+    for(i = 0; i < mDtnodes.size(); i++)
+    {
+        node = mDtnodes[i];
+        if ( node.isInsideNode(position) )
+        {
+            *onNode = true;
+            break;
+        }
+        *onNode = false;
+    }
+    
+    return i;
 }
 void DtnodeLine::setLineResolution(int level)
 {

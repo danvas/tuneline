@@ -71,7 +71,7 @@ void TunelineApp::setup()
 //    mPivot = Vec2f(WINDOW_WIDTH/2.0f, WINDOW_HEIGHT/2.0f);
     mPivot = Vec2f(WINDOW_WIDTH/2.0f, 0.0f);
     
-    mLevelOnLaunch = LIFE;
+    mLevelOnLaunch = DECADE;
     mCurrentLevel = mLevelOnLaunch;
     mMouseOnNode = false;
     mDoubleClickFlag = 1;
@@ -97,11 +97,11 @@ void TunelineApp::doubleClickLeft( MouseEvent &event)
     if( ( interval <= DOUBLE_CLICK_INTERVAL) && (mDoubleClickFlag!= 1) )
     {
         
-        cout << "\ndouble clicked! ";
-        cout << "interval = " << interval << endl;
-        Dtnode node = mDtnodeLine.getNodeAtPosition( event.getPos(), &mMouseOnNode );
-        cout << "\nmMouseOnNode = " << mMouseOnNode << endl;
-        if(mMouseOnNode) cout << "\nclicked on node " << node.mDate <<endl;
+        cout << "\n***double clicked! ";
+//        cout << "interval = " << interval << endl;
+        int nodeindex = mDtnodeLine.getNodeIndexAtPosition( event.getPos(), &mMouseOnNode );
+//        cout << "\nmMouseOnNode = " << mMouseOnNode << endl;
+        if(mMouseOnNode) cout << "\nclicked on node " << nodeindex <<endl;
         mDoubleClickFlag = 1;
     }
     else
@@ -161,6 +161,7 @@ void TunelineApp::levelUp()
     {
         mCurrentLevel++;
         mLines[mCurrentLevel] = DtnodeLine(BDAY_INPUT, mCurrentLevel, mPivot);
+        mDtnodeLine = mLines[mCurrentLevel];
     }
     cout << "up key. View " << mCurrentLevel << endl;
 }

@@ -30,6 +30,7 @@ public:
     void expandAtNode(int, ci::Vec2f);
     
     Dtnode getNodeAtPosition(ci::Vec2f, bool*);
+    int getNodeIndexAtPosition(ci::Vec2f, bool*);
     int getLineResolution(int);
     std::vector<Dtnode> mDtnodes;
     
