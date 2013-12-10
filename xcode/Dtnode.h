@@ -19,7 +19,7 @@
 class Dtnode {
 public:
     Dtnode();
-    Dtnode(boost::gregorian::date, ci::Vec2i, float);
+    Dtnode(boost::gregorian::date, ci::Vec2f, float);
     void update(ci::Color, ci::Vec2f);
     void draw();
 

@@ -20,7 +20,7 @@ using namespace boost::gregorian;
 
 Dtnode::Dtnode(){}
 
-Dtnode::Dtnode(date aDate, Vec2i pos, float size)   
+Dtnode::Dtnode(date aDate, Vec2f pos, float size)
 {
     mDate = aDate;
     position = pos;

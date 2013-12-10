@@ -3,6 +3,7 @@
 #include "cinder/Vector.h"
 #include "DtnodeLine.h"
 #include "DateUtil.h"
+#include "cinder/Rand.h"
 
 #include <string>
 #include <vector>
@@ -11,7 +12,7 @@
 // iPad dimensions
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 1004
-#define MAX_TIMELINES 4
+#define MAX_TIMELINES 5
 #define DOUBLE_CLICK_INTERVAL 0.30 //seconds
 
 //For testing
@@ -35,8 +36,6 @@ class TunelineApp : public AppBasic {
     void mouseDrag(MouseEvent);
 	void update();
 	void draw();
-
-    void testFunc(string);
     void levelUp();
     void levelDown();
     
@@ -79,15 +78,15 @@ void TunelineApp::setup()
     mLastClockReading = getElapsedSeconds();
     mDtnodeLine = DtnodeLine(BDAY_INPUT, mLevelOnLaunch, mPivot);
     mLines[mLevelOnLaunch] = mDtnodeLine;
+    for (int i = 0; i < MAX_TIMELINES; i++){
+        mLines[i] = DtnodeLine(BDAY_INPUT, i, mPivot + Vec2f(i*50.0f, 0));
+    }
     console() << "\nPivot started at " << mPivot << endl;
 }
 
 void TunelineApp::mouseDown( MouseEvent event )
 {
-
     doubleClickLeft(event);
-    
-    
 }
 
 /*
@@ -140,21 +139,14 @@ void TunelineApp::keyDown( KeyEvent event )
 
 void TunelineApp::update()
 {
-//    for(int i = 0; i < MAX_TIMELINES; i++){
-//        mLines[i].update();
-//    }
-    
-    
+    mLines[mCurrentLevel].update();
 }
 
 void TunelineApp::draw()
 {
 	// clear out the window with black
 	gl::clear( Color( 0.96f, 0.96f, 0.9f ) );
-    for(int i = 0; i < MAX_TIMELINES; i++){
-//        cout << "line " << i << ": "<< mLines[i].mLevel << endl;
-//        mLines[i].draw();
-    }
+    mLines[mCurrentLevel].draw();
 //    gl::pushModelView();
 //    gl::translate( Vec3f(getWindowWidth()/2,getWindowHeight()/2,0) );
 //    gl::rotate( Vec3f(35,20,0) );
@@ -165,20 +157,13 @@ void TunelineApp::draw()
 }
 
 
-void TunelineApp::testFunc(string str)
-{
-    printf("\nPrinted %s from testFunc()", str.c_str());
-}
-
-
 void TunelineApp::levelUp()
 {
-    Vec2f TEMP_offset =Vec2f(30.0f, 30.0f);
     
     if ( mCurrentLevel != DAY )
     {
         mCurrentLevel++;
-        mLines[mCurrentLevel] = DtnodeLine(BDAY_INPUT, mCurrentLevel, mPivot + TEMP_offset);
+        mLines[mCurrentLevel] = DtnodeLine(BDAY_INPUT, mCurrentLevel, mPivot);
     }
     cout << "up key. View " << mCurrentLevel << endl;
 }

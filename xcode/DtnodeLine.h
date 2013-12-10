@@ -27,6 +27,8 @@ public:
     
     void draw();
     void setLineResolution(int);
+    void expandAtNode(int, ci::Vec2f);
+    
     Dtnode getNodeAtPosition(ci::Vec2f, bool*);
     int getLineResolution(int);
     std::vector<Dtnode> mDtnodes;
