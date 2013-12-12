@@ -28,6 +28,7 @@ public:
     void draw();
     void setLineResolution(int);
     void expandAtNode(int, ci::Vec2f);
+    void expandNodeUpdate();
     
     Dtnode getNodeAtPosition(ci::Vec2f, bool*);
     int getNodeIndexAtPosition(ci::Vec2f, bool*);

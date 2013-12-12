@@ -20,13 +20,14 @@ using namespace boost::gregorian;
 
 Dtnode::Dtnode(){}
 
-Dtnode::Dtnode(date aDate, Vec2f pos, float size)
+Dtnode::Dtnode(int index, date aDate, Vec2f pos, float size)
 {
-    mDate = aDate;
-    position = pos;
-    mSize = size;
-    mDirToPivot = Vec2f::zero();
-    mColor = Color(0.8f, 0.2f, 0.3f);
+    this->index = index;
+    this->mDate = aDate;
+    this->position = pos;
+    this->mSize = size;
+    this->mDirToPivot = Vec2f::zero();
+    this->mColor = Color(0.8f, 0.2f, 0.3f);
 }
 
 void Dtnode::update(Color color, Vec2f pivot)

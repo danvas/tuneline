@@ -29,23 +29,15 @@ DtnodeLine::DtnodeLine( string bdate, unsigned int level, Vec2f pivot )
     mLevel = level;
 	mSpacing = getWindowHeight() / mResolution;
     expandAtNode(0, pivot);
+    console() << "\nPivot started at " << pivot << endl;
     
 }
 
 void DtnodeLine::update()
 {
     
-    Vec2f currentPosition = Vec2f::zero();
-    for (int i=0; i<mResolution; i++) {        
-        currentPosition = easeOutExpo((getElapsedSeconds()-circleTimeBase[i]) * TWEEN_SPEED) * (targetPosition[i] - startPosition[i]) + startPosition[i];
-        
-        mDtnodes[i].setPosition(currentPosition);
-        
-        if ( mDtnodes[i].position.distance(targetPosition[i]) < 1.0f ){
-            startPosition[i] = mDtnodes[i].position;
-            circleTimeBase[i] = getElapsedSeconds();  
-        }
-    }
+    expandNodeUpdate();
+    
 }
 
 void DtnodeLine::draw()
@@ -114,7 +106,7 @@ void DtnodeLine::setLineResolution(int level)
             break;
         case 4:// days
             greg_year someYear = greg_year(2013);
-            greg_month someMonth = greg_month(Nov);
+            greg_month someMonth = greg_month(Dec);
             mResolution = DateUtil::getDayspan(someYear, someMonth);
             break;
     }
@@ -127,48 +119,82 @@ void DtnodeLine::expandAtNode(int nodeIndex, Vec2f pivot){
     console() << "enter other index? " << (enterNodeIndex? "yes" : "no") << endl;
     
     Vec2f currentPosition;
-    if (enterNodeIndex)
+    console() << "Starting at index " << enterNodeIndex << endl;
+    offsetY = enterNodeIndex*mSpacing/2.0f;
+    
+    for(int i = 0; i<mResolution; i++)
     {
-        console() << "Starting at index " << enterNodeIndex << endl;
-        offsetY = enterNodeIndex*mSpacing/2.0f;
+        currentPosition = Vec2f(pivot.x, pivot.y + offsetY);
+        mDtnodes.push_back( Dtnode( i, mBirthdate, currentPosition, CIRCLE_RADIUS ) );
         
-        for(int i = 0; i<mResolution; i++)
-        {
-            currentPosition = Vec2f(pivot.x, pivot.y + offsetY);
-            mDtnodes.push_back( Dtnode( mBirthdate, currentPosition, CIRCLE_RADIUS ) );
-            
-            targetPosition[i].x = pivot.x;
-            targetPosition[i].y = (i - enterNodeIndex)*mSpacing + offsetY;
-            
-            startPosition[i].x = pivot.x;
-            startPosition[i].y = pivot.y + offsetY;
-            
-            console() << "current: " << mDtnodes[i].position << endl;
-            console() << "start: " << startPosition[i].y << endl;
-            console() << "target: " << targetPosition[i].y << endl << endl;
-            
-            circleTimeBase[i] = 0;
-        }
-    } else {
-        for(int i = 0; i<mResolution; i++){
-            currentPosition = Vec2f(pivot.x, pivot.y + offsetY);
-            mDtnodes.push_back( Dtnode( mBirthdate, currentPosition, CIRCLE_RADIUS ) );
-            
-            targetPosition[i].x = pivot.x;
-            targetPosition[i].y = i * mSpacing + offsetY;
-            
-            startPosition[i].x = pivot.x;
-            startPosition[i].y = pivot.y + offsetY;
-            
-            console() << "current: " << mDtnodes[i].position << endl;
-            console() << "start: " << startPosition[i].y << endl;
-            console() << "target: " << targetPosition[i].y << endl << endl;
-            
-            circleTimeBase[i] = 0;
-        }
+        targetPosition[i].x = pivot.x;
+        targetPosition[i].y = (i - enterNodeIndex)*mSpacing + offsetY;
+        
+        startPosition[i].x = pivot.x;
+        startPosition[i].y = pivot.y + offsetY;
+        
+//        console() << "current: " << mDtnodes[i].position << endl;
+//        console() << "start: " << startPosition[i].y << endl;
+//        console() << "target: " << targetPosition[i].y << endl << endl;
+        
+        circleTimeBase[i] = 0;
     }
+    
+    
+//    if (enterNodeIndex)
+//    {
+//        console() << "Starting at index " << enterNodeIndex << endl;
+//        offsetY = enterNodeIndex*mSpacing/2.0f;
+//        
+//        for(int i = 0; i<mResolution; i++)
+//        {
+//            currentPosition = Vec2f(pivot.x, pivot.y + offsetY);
+//            mDtnodes.push_back( Dtnode( mBirthdate, currentPosition, CIRCLE_RADIUS ) );
+//            
+//            targetPosition[i].x = pivot.x;
+//            targetPosition[i].y = (i - enterNodeIndex)*mSpacing + offsetY;
+//            
+//            startPosition[i].x = pivot.x;
+//            startPosition[i].y = pivot.y + offsetY;
+//            
+//            console() << "current: " << mDtnodes[i].position << endl;
+//            console() << "start: " << startPosition[i].y << endl;
+//            console() << "target: " << targetPosition[i].y << endl << endl;
+//            
+//            circleTimeBase[i] = 0;
+//        }
+//    } else {
+//        for(int i = 0; i<mResolution; i++){
+//            currentPosition = Vec2f(pivot.x, pivot.y + offsetY);
+//            mDtnodes.push_back( Dtnode( mBirthdate, currentPosition, CIRCLE_RADIUS ) );
+//            
+//            targetPosition[i].x = pivot.x;
+//            targetPosition[i].y = i * mSpacing + offsetY;
+//            
+//            startPosition[i].x = pivot.x;
+//            startPosition[i].y = pivot.y + offsetY;
+//            
+//            console() << "current: " << mDtnodes[i].position << endl;
+//            console() << "start: " << startPosition[i].y << endl;
+//            console() << "target: " << targetPosition[i].y << endl << endl;
+//            
+//            circleTimeBase[i] = 0;
+//        }
+//    }
 
 }
 
-
+void DtnodeLine::expandNodeUpdate(){
+    Vec2f currentPosition = Vec2f::zero();
+    for (int i=0; i<mResolution; i++) {
+        currentPosition = easeOutExpo((getElapsedSeconds()-circleTimeBase[i]) * TWEEN_SPEED) * (targetPosition[i] - startPosition[i]) + startPosition[i];
+        
+        mDtnodes[i].setPosition(currentPosition);
+        
+        if ( mDtnodes[i].position.distance(targetPosition[i]) < 1.0f ){
+            startPosition[i] = mDtnodes[i].position;
+            circleTimeBase[i] = getElapsedSeconds();
+        }
+    }
+}
 

@@ -52,7 +52,6 @@ class TunelineApp : public AppBasic {
     
 
     enum {LIFE, DECADE, YEAR, MONTH, DAY};
-    unsigned int mLevelOnLaunch;
     Vec2f mPivot;
     unsigned int mDoubleClickFlag;
     double mLastClockReading;
@@ -69,16 +68,14 @@ void TunelineApp::setup()
 {
 //    testDateUtil(BDAY_INPUT);
 //    mPivot = Vec2f(WINDOW_WIDTH/2.0f, WINDOW_HEIGHT/2.0f);
+    int levelOnLaunch = LIFE;
     mPivot = Vec2f(WINDOW_WIDTH/2.0f, 0.0f);
-    
-    mLevelOnLaunch = DECADE;
-    mCurrentLevel = mLevelOnLaunch;
+    mCurrentLevel = levelOnLaunch;
     mMouseOnNode = false;
     mDoubleClickFlag = 1;
     mLastClockReading = getElapsedSeconds();
-    mDtnodeLine = DtnodeLine(BDAY_INPUT, mLevelOnLaunch, mPivot);
-    mLines[mLevelOnLaunch] = mDtnodeLine;
-    console() << "\nPivot started at " << mPivot << endl;
+    mDtnodeLine = DtnodeLine(BDAY_INPUT, levelOnLaunch, mPivot);
+    mLines[levelOnLaunch] = mDtnodeLine;
 }
 
 void TunelineApp::mouseDown( MouseEvent event )
@@ -99,9 +96,11 @@ void TunelineApp::doubleClickLeft( MouseEvent &event)
         
         cout << "\n***double clicked! ";
 //        cout << "interval = " << interval << endl;
-        int nodeindex = mDtnodeLine.getNodeIndexAtPosition( event.getPos(), &mMouseOnNode );
+        Dtnode node = mLines[mCurrentLevel].getNodeAtPosition( event.getPos(), &mMouseOnNode );
+        mPivot = node.position;
+        levelUp();
 //        cout << "\nmMouseOnNode = " << mMouseOnNode << endl;
-        if(mMouseOnNode) cout << "\nclicked on node " << nodeindex <<endl;
+        if(mMouseOnNode) cout << "\nclicked on node " << node.index <<endl;
         mDoubleClickFlag = 1;
     }
     else
@@ -170,7 +169,6 @@ void TunelineApp::levelDown()
 {
     if ( mCurrentLevel != LIFE )
     {
-        //mCurrentLevel -= 1;
         mDtnodeLine = mLines[--mCurrentLevel];
     }
     cout << "down key. View " << mCurrentLevel << endl;

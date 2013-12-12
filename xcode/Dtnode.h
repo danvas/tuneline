@@ -19,15 +19,15 @@
 class Dtnode {
 public:
     Dtnode();
-    Dtnode(boost::gregorian::date, ci::Vec2f, float);
+    Dtnode(int, boost::gregorian::date, ci::Vec2f, float);
     void update(ci::Color, ci::Vec2f);
     void draw();
 
     void move( ci::Vec2f );
     void setPosition(ci::Vec2f);
     bool isInsideNode(ci::Vec2i);
-    
-    
+
+    int index;
     boost::gregorian::date mDate;
     ci::Vec2f position;
     ci::Vec2f mDirToPivot;
