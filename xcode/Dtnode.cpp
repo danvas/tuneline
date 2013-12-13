@@ -26,16 +26,11 @@ Dtnode::Dtnode(int index, date aDate, Vec2f pos, float size)
     this->mDate = aDate;
     this->position = pos;
     this->mSize = size;
-    this->mDirToPivot = Vec2f::zero();
     this->mColor = Color(0.8f, 0.2f, 0.3f);
 }
 
 void Dtnode::update(Color color, Vec2f pivot)
 {
-    
-    mDirToPivot = pivot - position;
-    //console() << "DirToPivot = " << mDirToPivot << std::endl;
-    mDirToPivot.safeNormalize();
     mColor = color;
 }
 

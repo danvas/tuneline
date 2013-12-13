@@ -3,7 +3,6 @@
 #include "cinder/Vector.h"
 #include "DtnodeLine.h"
 #include "DateUtil.h"
-#include "cinder/Rand.h"
 
 #include <string>
 #include <vector>
@@ -97,10 +96,13 @@ void TunelineApp::doubleClickLeft( MouseEvent &event)
         cout << "\n***double clicked! ";
 //        cout << "interval = " << interval << endl;
         Dtnode node = mLines[mCurrentLevel].getNodeAtPosition( event.getPos(), &mMouseOnNode );
-        mPivot = node.position;
-        levelUp();
+        
 //        cout << "\nmMouseOnNode = " << mMouseOnNode << endl;
-        if(mMouseOnNode) cout << "\nclicked on node " << node.index <<endl;
+        if(mMouseOnNode){
+            mPivot = node.position;
+            cout << "\nclicked on node " << node.index <<" at "<< node.position <<endl;
+            levelUp();
+        }
         mDoubleClickFlag = 1;
     }
     else
@@ -143,13 +145,6 @@ void TunelineApp::draw()
 	// clear out the window with black
 	gl::clear( Color( 0.96f, 0.96f, 0.9f ) );
     mLines[mCurrentLevel].draw();
-//    gl::pushModelView();
-//    gl::translate( Vec3f(getWindowWidth()/2,getWindowHeight()/2,0) );
-//    gl::rotate( Vec3f(35,20,0) );
-//    gl::drawCube( Vec3f::zero(), Vec3f(100,100,100) );
-//    gl::popModelView();
-//    gl::clear( Color( 0, 0, 0 ) );
-    
 }
 
 
@@ -159,8 +154,8 @@ void TunelineApp::levelUp()
     if ( mCurrentLevel != DAY )
     {
         mCurrentLevel++;
-        mLines[mCurrentLevel] = DtnodeLine(BDAY_INPUT, mCurrentLevel, mPivot);
-        mDtnodeLine = mLines[mCurrentLevel];
+        mDtnodeLine = DtnodeLine(BDAY_INPUT, mCurrentLevel, mPivot);
+        mLines[mCurrentLevel] = mDtnodeLine;
     }
     cout << "up key. View " << mCurrentLevel << endl;
 }

@@ -30,7 +30,6 @@ public:
     int index;
     boost::gregorian::date mDate;
     ci::Vec2f position;
-    ci::Vec2f mDirToPivot;
     float mSize;
     ci::Color mColor;
     
