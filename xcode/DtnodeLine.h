@@ -16,7 +16,7 @@
 #include <vector>
 
 #define MAX_NODES 40
-#define TWEEN_SPEED 0.03
+#define TWEEN_SPEED 0.1
 class DtnodeLine {
 public:
     DtnodeLine();
@@ -26,7 +26,6 @@ public:
     
     void draw();
     void setLineResolution(int);
-    void expandNodes(ci::Vec2f);
     void expandNodeUpdate();
     
     Dtnode getNodeAtPosition(ci::Vec2f, bool*);
@@ -35,7 +34,6 @@ public:
     std::vector<Dtnode> mDtnodes;
     
     int mSpacing;
-    unsigned int mLevel;
     ci::Vec2f mPivot;
 private:
     boost::gregorian::date mToday;
@@ -43,8 +41,7 @@ private:
     int mResolution;
     ci::Vec2f mDirToPivot;
     
-    ci::Vec2f startPosition[MAX_NODES];
     ci::Vec2f targetPosition[MAX_NODES];
-    float circleTimeBase[MAX_NODES];
+    double elapsedLevelTime;
 };
 
