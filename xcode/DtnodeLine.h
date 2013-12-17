@@ -16,7 +16,7 @@
 #include <vector>
 
 #define MAX_NODES 40
-#define TWEEN_SPEED 0.1
+#define TWEEN_SPEED 0.5
 class DtnodeLine {
 public:
     DtnodeLine();
@@ -38,6 +38,7 @@ public:
 private:
     boost::gregorian::date mToday;
     boost::gregorian::date mBirthdate;
+    int mLevel;
     int mResolution;
     ci::Vec2f mDirToPivot;
     

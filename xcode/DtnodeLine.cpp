@@ -25,31 +25,31 @@ DtnodeLine::DtnodeLine( string bdate, unsigned int level, Vec2f pivot )
 {
     mToday = day_clock::local_day();
     mBirthdate = from_simple_string(bdate);
+    mLevel = level;
     setLineResolution(level);
-	mSpacing = getWindowHeight() / mResolution;
-    mPivot = pivot;// + Vec2f(0,0.0f);
-    
-    // set up starting and target positions
-    float offsetY = mSpacing/2.0f;
-    Vec2f currentPosition = Vec2f(pivot.x, pivot.y);
+	mSpacing = getWindowWidth() / mResolution;
+    mPivot = pivot;
+
+    // set up start and target positions
+    float offsetX = mSpacing/2.0f;
+    Vec2f currentPosition = (!level)? Vec2f(pivot.x + offsetX, pivot.y) : Vec2f(pivot.x, pivot.y);
     for(int i = 0; i<mResolution; i++)
     {
         mDtnodes.push_back( Dtnode( i, mBirthdate, currentPosition, CIRCLE_RADIUS ) );
         
-        targetPosition[i].x = pivot.x;
-        targetPosition[i].y = i*mSpacing + offsetY;
-        
-        console() << "current: " << mDtnodes[i].position.y << endl;
-        console() << "target: " << targetPosition[i].y << endl << endl;
+        targetPosition[i].x = (i * mSpacing) + offsetX;
+        targetPosition[i].y = pivot.y;
+//        console() << "current: " << mDtnodes[i].position.y << endl;
+//        console() << "target: " << targetPosition[i].y << endl << endl;
     }
     elapsedLevelTime = getElapsedSeconds();
-//    console() << "\nPivot started at " << pivot << endl;
-    
 }
 
 void DtnodeLine::update()
 {
-    expandNodeUpdate();
+    if (mLevel){
+        expandNodeUpdate();
+    }
     
 }
 

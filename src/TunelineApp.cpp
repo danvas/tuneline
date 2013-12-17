@@ -1,6 +1,7 @@
 #include "cinder/app/AppNative.h"
 #include "cinder/gl/gl.h"
 #include "cinder/Vector.h"
+#include "cinder/Camera.h"
 #include "DtnodeLine.h"
 #include "DateUtil.h"
 
@@ -9,8 +10,8 @@
 #include <time.h>
 
 // iPad dimensions
-#define WINDOW_WIDTH 800
-#define WINDOW_HEIGHT 1004
+#define WINDOW_WIDTH 1024
+#define WINDOW_HEIGHT 768
 #define MAX_TIMELINES 5
 #define DOUBLE_CLICK_INTERVAL 0.30 //seconds
 
@@ -41,15 +42,24 @@ class TunelineApp : public AppBasic {
     void testDateUtil(string);
     
     
-    // Member variables
+    ///////////////////////////// Member variables /////////////////////////////////
+    //Camera
+    // CAMERA
+	CameraOrtho         mCamera;
+	Quatf				mSceneRotation;
+	float				mCameraDistance;
+	Vec3f				mEye, mCenter, mUp;
+    
+    // Timeline
     DtnodeLine mDtnodeLine;
     DtnodeLine mLines[MAX_TIMELINES];
     
+    // Mouse events
     Vec2i mMouseLoc;
     int mCurrentLevel;
     bool mMouseOnNode;
     
-
+    
     enum {LIFE, DECADE, YEAR, MONTH, DAY};
     Vec2f mPivot;
     unsigned int mDoubleClickFlag;
@@ -65,10 +75,18 @@ void TunelineApp::prepareSettings( Settings *settings )
 
 void TunelineApp::setup()
 {
+    // Camera
+    mCameraDistance = 500.0f;
+	mEye			= Vec3f( 0.0f, 0.0f, mCameraDistance );
+    mCenter     = Vec3f::zero();
+    mUp         = Vec3f::yAxis();
+    //mCam.setPerspective( 60.0f, getWindowAspectRatio(), 5.0f, 3000.0f );
+    mCamera.setOrtho( 0, getWindowWidth(), getWindowHeight(), 0, -1, 1 );
+
 //    testDateUtil(BDAY_INPUT);
 //    mPivot = Vec2f(WINDOW_WIDTH/2.0f, WINDOW_HEIGHT/2.0f);
     int levelOnLaunch = LIFE;
-    mPivot = Vec2f(WINDOW_WIDTH/2.0f, 0.0f);
+    mPivot = Vec2f(0.0f, WINDOW_HEIGHT/2.0f);
     mCurrentLevel = levelOnLaunch;
     mMouseOnNode = false;
     mDoubleClickFlag = 1;
@@ -92,15 +110,10 @@ void TunelineApp::doubleClickLeft( MouseEvent &event)
     
     if( ( interval <= DOUBLE_CLICK_INTERVAL) && (mDoubleClickFlag!= 1) )
     {
-        
-        cout << "\n***double clicked! ";
-//        cout << "interval = " << interval << endl;
         Dtnode node = mLines[mCurrentLevel].getNodeAtPosition( event.getPos(), &mMouseOnNode );
-        
-//        cout << "\nmMouseOnNode = " << mMouseOnNode << endl;
         if(mMouseOnNode){
             mPivot = node.position;
-            cout << "\nclicked on node " << node.index <<" at "<< node.position <<endl;
+            cout << "\n*** double clicked on node " << node.index <<" at "<< node.position <<endl;
             levelUp();
         }
         mDoubleClickFlag = 1;
@@ -137,6 +150,12 @@ void TunelineApp::keyDown( KeyEvent event )
 
 void TunelineApp::update()
 {
+    // UPDATE CAMERA
+	mEye = Vec3f( 0.0f, 0.0f, mCameraDistance );
+//	mCamera.lookAt( mEye, mCenter, mUp );
+//    mCamera.setCenterOfInterestPoint(mEye);
+	gl::rotate( mSceneRotation );
+    gl::setMatrices( mCamera );
     mLines[mCurrentLevel].update();
 }
 
