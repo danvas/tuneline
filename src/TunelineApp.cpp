@@ -68,7 +68,6 @@ class TunelineApp : public AppBasic {
 
 void TunelineApp::prepareSettings( Settings *settings )
 {
-//    settings->setWindowSize( 1, 1 );
 	settings->setWindowSize( WINDOW_WIDTH, WINDOW_HEIGHT );
 	settings->setFrameRate( 60.0f );
 }
@@ -81,7 +80,7 @@ void TunelineApp::setup()
     mCenter     = Vec3f::zero();
     mUp         = Vec3f::yAxis();
     //mCam.setPerspective( 60.0f, getWindowAspectRatio(), 5.0f, 3000.0f );
-    mCamera.setOrtho( 0, getWindowWidth(), getWindowHeight(), 0, -1, 1 );
+    mCamera.setOrtho( 0, getWindowWidth(), getWindowHeight(), 0, -1000, 1000 );
 
 //    testDateUtil(BDAY_INPUT);
 //    mPivot = Vec2f(WINDOW_WIDTH/2.0f, WINDOW_HEIGHT/2.0f);
@@ -152,8 +151,7 @@ void TunelineApp::update()
 {
     // UPDATE CAMERA
 	mEye = Vec3f( 0.0f, 0.0f, mCameraDistance );
-//	mCamera.lookAt( mEye, mCenter, mUp );
-//    mCamera.setCenterOfInterestPoint(mEye);
+	mCamera.lookAt( mEye, mCenter, mUp );
 	gl::rotate( mSceneRotation );
     gl::setMatrices( mCamera );
     mLines[mCurrentLevel].update();
