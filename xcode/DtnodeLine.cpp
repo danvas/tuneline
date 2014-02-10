@@ -112,7 +112,7 @@ void DtnodeLine::setLineResolution(int level)
             mResolution = (int)ceil( DateUtil::getYearspan(mBirthdate, mToday)/10.0f );
             break;
         case 2:// years
-            mResolution = DateUtil::getYearspan(mBirthdate, mToday);
+            mResolution = 10;//DateUtil::getYearspan(mBirthdate, mToday);
             break;
         case 3:// months
             mResolution = DateUtil::getMonthspan( greg_year(2013) );

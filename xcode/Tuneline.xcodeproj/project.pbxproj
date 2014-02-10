@@ -20,7 +20,7 @@
 		53E3CDFC0E86099300238D2B /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53E3CDFB0E86099300238D2B /* Carbon.framework */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		9913735C18360FB8005AB375 /* HttpRequestHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9913735A18360FB8005AB375 /* HttpRequestHandler.cpp */; };
-		9959229C1831FECA007A6BBD /* Track.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9959229A1831FECA007A6BBD /* Track.cpp */; };
+		9959229C1831FECA007A6BBD /* tlTrack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9959229A1831FECA007A6BBD /* tlTrack.cpp */; };
 		998A7515182CC7E500854904 /* Dtnode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 998A7513182CC7E500854904 /* Dtnode.cpp */; };
 		998A7518182CD98500854904 /* DtnodeLine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 998A7516182CD98500854904 /* DtnodeLine.cpp */; };
 		99B6DDE61839CA3800ECD46D /* DateUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 99B6DDE41839CA3800ECD46D /* DateUtil.cpp */; };
@@ -47,8 +47,8 @@
 		8D1107320486CEB800E47090 /* Tuneline.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tuneline.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9913735A18360FB8005AB375 /* HttpRequestHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HttpRequestHandler.cpp; sourceTree = "<group>"; };
 		9913735B18360FB8005AB375 /* HttpRequestHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HttpRequestHandler.h; sourceTree = "<group>"; };
-		9959229A1831FECA007A6BBD /* Track.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Track.cpp; sourceTree = "<group>"; };
-		9959229B1831FECA007A6BBD /* Track.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Track.h; sourceTree = "<group>"; };
+		9959229A1831FECA007A6BBD /* tlTrack.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tlTrack.cpp; sourceTree = "<group>"; };
+		9959229B1831FECA007A6BBD /* tlTrack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tlTrack.h; sourceTree = "<group>"; };
 		998A7513182CC7E500854904 /* Dtnode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Dtnode.cpp; sourceTree = "<group>"; };
 		998A7514182CC7E500854904 /* Dtnode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Dtnode.h; sourceTree = "<group>"; };
 		998A7516182CD98500854904 /* DtnodeLine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DtnodeLine.cpp; sourceTree = "<group>"; };
@@ -85,7 +85,7 @@
 				00BAE6590E7ED9C10018A608 /* TunelineApp.cpp */,
 				998A7513182CC7E500854904 /* Dtnode.cpp */,
 				998A7516182CD98500854904 /* DtnodeLine.cpp */,
-				9959229A1831FECA007A6BBD /* Track.cpp */,
+				9959229A1831FECA007A6BBD /* tlTrack.cpp */,
 				9913735A18360FB8005AB375 /* HttpRequestHandler.cpp */,
 				99B6DDE41839CA3800ECD46D /* DateUtil.cpp */,
 			);
@@ -145,7 +145,7 @@
 				99B3C6671842B44F00B31914 /* TNode.h */,
 				99B6DDE51839CA3800ECD46D /* DateUtil.h */,
 				9913735B18360FB8005AB375 /* HttpRequestHandler.h */,
-				9959229B1831FECA007A6BBD /* Track.h */,
+				9959229B1831FECA007A6BBD /* tlTrack.h */,
 				998A7517182CD98500854904 /* DtnodeLine.h */,
 				998A7514182CC7E500854904 /* Dtnode.h */,
 				32CA4F630368D1EE00C91783 /* Tuneline_Prefix.pch */,
@@ -235,7 +235,7 @@
 				00BAE65A0E7ED9C10018A608 /* TunelineApp.cpp in Sources */,
 				998A7515182CC7E500854904 /* Dtnode.cpp in Sources */,
 				998A7518182CD98500854904 /* DtnodeLine.cpp in Sources */,
-				9959229C1831FECA007A6BBD /* Track.cpp in Sources */,
+				9959229C1831FECA007A6BBD /* tlTrack.cpp in Sources */,
 				9913735C18360FB8005AB375 /* HttpRequestHandler.cpp in Sources */,
 				99B6DDE61839CA3800ECD46D /* DateUtil.cpp in Sources */,
 			);
@@ -332,7 +332,7 @@
 				GCC_WARN_UNUSED_FUNCTION = NO;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/boost\"";
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				MACOSX_DEPLOYMENT_TARGET = "";
 				ONLY_ACTIVE_ARCH = YES;
 				PREBINDING = NO;
 				SDKROOT = macosx;
@@ -363,7 +363,7 @@
 				GCC_WARN_UNUSED_FUNCTION = NO;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/boost\"";
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				MACOSX_DEPLOYMENT_TARGET = "";
 				ONLY_ACTIVE_ARCH = NO;
 				PREBINDING = NO;
 				SDKROOT = macosx;

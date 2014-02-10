@@ -16,7 +16,7 @@
 #include <vector>
 
 #define MAX_NODES 40
-#define TWEEN_SPEED 0.5
+#define TWEEN_SPEED 0.2
 class DtnodeLine {
 public:
     DtnodeLine();
