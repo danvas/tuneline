@@ -7,8 +7,6 @@
 #include "DtnodeLine.h"
 #include "DateUtil.h"
 
-#include "Resources.h"
-
 #include <string>
 #include <vector>
 #include <time.h>
@@ -111,12 +109,15 @@ void TunelineApp::setup()
     mDtnodeLine = DtnodeLine(BDAY_INPUT, levelOnLaunch, mPivot);
     mLines[levelOnLaunch] = mDtnodeLine;
     
+    
     // MOVIEWRITER SETUP
-    fs::path path = getSaveFilePath();
-	if( path.empty() )
-		return; // user cancelled save
-    qtime::MovieWriter::Format format;
-	mMovieWriter = qtime::MovieWriter::create( path, getWindowWidth(), getWindowHeight(), format );
+    if(MOVIE_REC){
+        fs::path path = getSaveFilePath();
+        if( path.empty() )
+            return; // user cancelled save
+        qtime::MovieWriter::Format format;
+        mMovieWriter = qtime::MovieWriter::create( path, getWindowWidth(), getWindowHeight(), format );
+    }
 	
 }
 
@@ -193,9 +194,13 @@ void TunelineApp::draw()
     // DRAW PARAMS WINDOW
 //	mParams->draw();
     
-    // add this frame to our movie
-	if( mMovieWriter )
-		mMovieWriter->addFrame( copyWindowSurface() );
+    if(MOVIE_REC){
+        gl::color( Color(0,0,0));
+        gl::drawSolidEllipse(Vec2f(mMouseLoc.x, mMouseLoc.y), 2.0f, 2.0f );
+        // add this frame to our movie
+        if( mMovieWriter )
+            mMovieWriter->addFrame( copyWindowSurface() );
+    }
 }
 
 
